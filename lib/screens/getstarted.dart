@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:spotify/screens/choosemode.dart';
 
 class GetStarted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Get screen size
+    final Size screenSize = MediaQuery.of(context).size;
+    final double height = screenSize.height;
+    final double width = screenSize.width;
+
     return Scaffold(
       backgroundColor: Colors.black,
-      // Remove the default app bar
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
@@ -13,74 +18,107 @@ class GetStarted extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(
-                    'assets/images/getstarted.png'), // Update with your image path
+                image: AssetImage('assets/images/getstarted.png'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
           // Content
-          Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Add your content widgets here
-                SizedBox(
-                  height: 35,
+          SafeArea(
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: height - MediaQuery.of(context).padding.top,
                 ),
-                Container(
-                    height: 50,
-                    child: Image.asset(
-                      'assets/images/spotify.png',
-                      fit: BoxFit.cover,
-                    )),
-                SizedBox(height: 435),
-                Text(
-                  'Enjoy Listening To Music',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'Poppins',
-                      fontSize: 25),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Top section with logo
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: height * 0.02,
+                      ),
+                      child: Container(
+                        height: height * 0.06,
+                        child: Image.asset(
+                          'assets/images/spotify.png',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    // Middle section with main content
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: width * 0.05),
+                      child: Column(
+                        children: [
+                          SizedBox(height: height * 0.35),
+                          Text(
+                            'Enjoy Listening To Music',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Poppins',
+                              fontSize: width * 0.06, // Responsive font size
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: height * 0.03),
+                          Text(
+                            'Lorem ipsum dolor sit amet,\n consectetur adipiscing elit. Sagittis enim \npurus sed phasellus. Cursus ornare id scelerisque aliquam.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Color(0xff797979),
+                              fontWeight: FontWeight.w300,
+                              fontFamily: 'Poppins',
+                              fontSize: width * 0.04, // Responsive font size
+                            ),
+                          ),
+                          SizedBox(height: height * 0.05),
+                          // Button with responsive width and height
+                          Container(
+                            width: min(width * 0.85, 350), // Max width of 350
+                            height: height * 0.08,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(35),
+                                ),
+                                backgroundColor: Color(0xff42C83C),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ChooseMode()));
+                              },
+                              child: Text(
+                                'Get Started',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.white,
+                                  fontFamily: 'Poppins',
+                                  fontSize:
+                                      width * 0.045, // Responsive font size
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: height * 0.05),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height: 30,
-                ),
-                Center(
-                  child: Text(
-                    'Lorem ipsum dolor sit amet,\n consectetur adipiscing elit. Sagittis enim \npurus sed phasellus. Cursus ornare id scelerisque aliquam.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Color(0xff797979),
-                        fontWeight: FontWeight.w300,
-                        fontFamily: 'Poppins',
-                        fontSize: 17),
-                  ),
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        fixedSize: Size(350, 100),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(35)),
-                        backgroundColor: Color(0xff42C83C)),
-                    onPressed: () {},
-                    child: Text(
-                      'Get Started',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                          fontFamily: 'Poppins',
-                          fontSize: 20),
-                    ))
-                // Add more widgets as needed
-              ],
+              ),
             ),
           ),
         ],
       ),
     );
   }
+}
+
+// Helper function to get minimum of two numbers
+double min(double a, double b) {
+  return a < b ? a : b;
 }

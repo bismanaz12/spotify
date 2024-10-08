@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:spotify/screens/register.dart';
 
 class ChooseMode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Get screen size
+    final Size screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 40, 40, 40),
-      // Remove the default app bar
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
@@ -13,115 +16,158 @@ class ChooseMode extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(
-                    'assets/images/chossemode.png'), // Update with your image path
+                image: AssetImage('assets/images/chossemode.png'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
           // Content
-          Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Add your content widgets here
-                SizedBox(
-                  height: 35,
-                ),
-                Container(
-                    height: 50,
-                    child: Image.asset(
-                      'assets/images/spotify.png',
-                      fit: BoxFit.cover,
-                    )),
-                SizedBox(height: 400),
-                Text(
-                  'Choose Mode',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'Poppins',
-                      fontSize: 25),
-                ),
-                SizedBox(
-                  height: 25,
-                ),
-                Center(
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          SafeArea(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Column(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(15),
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 90, 83, 83),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Image.asset('assets/images/Moon.png'),
-                            ),
-                            SizedBox(
-                              height: 25,
-                            ),
-                            Text(
-                              'Dark Mode',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Poppins',
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500),
-                            )
-                          ],
+                        // Spotify Logo
+                        SizedBox(height: screenSize.height * 0.02),
+                        SizedBox(
+                          height: screenSize.height * 0.06,
+                          child: Image.asset(
+                            'assets/images/spotify.png',
+                            fit: BoxFit.contain,
+                          ),
                         ),
-                        Column(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(15),
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 35, 33, 33),
-                                shape: BoxShape.circle,
+
+                        // Flexible space
+                        SizedBox(height: screenSize.height * 0.35),
+
+                        // Choose Mode Text
+                        Text(
+                          'Choose Mode',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Poppins',
+                            fontSize: screenSize.width * 0.06,
+                          ),
+                        ),
+
+                        SizedBox(height: screenSize.height * 0.03),
+
+                        // Mode Selection Row
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenSize.width * 0.1,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              _buildModeOption(
+                                context: context,
+                                imagePath: 'assets/images/Moon.png',
+                                label: 'Dark Mode',
+                                backgroundColor:
+                                    Color.fromARGB(255, 90, 83, 83),
                               ),
-                              child: Image.asset('assets/images/Sun 1.png'),
+                              _buildModeOption(
+                                context: context,
+                                imagePath: 'assets/images/Sun 1.png',
+                                label: 'Light Mode',
+                                backgroundColor:
+                                    Color.fromARGB(255, 35, 33, 33),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        SizedBox(height: screenSize.height * 0.08),
+
+                        // Continue Button
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenSize.width * 0.1,
+                          ),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(
+                                double.infinity,
+                                screenSize.height * 0.07,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(35),
+                              ),
+                              backgroundColor: Color(0xff42C83C),
                             ),
-                            SizedBox(
-                              height: 25,
-                            ),
-                            Text(
-                              'Light Mode',
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Register()));
+                            },
+                            child: Text(
+                              'Continue',
                               style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Poppins',
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500),
-                            )
-                          ],
-                        )
-                      ]),
-                ),
-                SizedBox(
-                  height: 70,
-                ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        fixedSize: Size(350, 100),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(35)),
-                        backgroundColor: Color(0xff42C83C)),
-                    onPressed: () {},
-                    child: Text(
-                      'Continue',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                          fontFamily: 'Poppins',
-                          fontSize: 20),
-                    ))
-                // Add more widgets as needed
-              ],
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                                fontFamily: 'Poppins',
+                                fontSize: screenSize.width * 0.05,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: screenSize.height * 0.02),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildModeOption({
+    required BuildContext context,
+    required String imagePath,
+    required String label,
+    required Color backgroundColor,
+  }) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double iconSize = screenSize.width * 0.15;
+
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.all(screenSize.width * 0.03),
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            shape: BoxShape.circle,
+          ),
+          child: Image.asset(
+            imagePath,
+            width: iconSize,
+            height: iconSize,
+          ),
+        ),
+        SizedBox(height: screenSize.height * 0.02),
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'Poppins',
+            fontSize: screenSize.width * 0.04,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 }
