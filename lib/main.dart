@@ -1,4 +1,6 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:spotify/firebase_options.dart';
 import 'package:spotify/screens/choosemode.dart';
 import 'package:spotify/screens/getstarted.dart';
 import 'package:spotify/screens/loading.dart';
@@ -6,7 +8,9 @@ import 'package:spotify/screens/register.dart';
 import 'package:spotify/screens/signin.dart';
 import 'package:spotify/screens/signup.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 

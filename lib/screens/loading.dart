@@ -17,7 +17,7 @@ class _LoadingState extends State<Loading> {
   void _startLoading() {
     _timer = Timer.periodic(const Duration(milliseconds: 50), (Timer timer) {
       setState(() {
-        if (_loadingPercentage < 2.0) {
+        if (_loadingPercentage < 1.0) {
           _loadingPercentage += 0.01;
         } else {
           _timer.cancel();
@@ -30,6 +30,14 @@ class _LoadingState extends State<Loading> {
   void _navigateToLoginScreen() {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => GetStarted()));
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+    _startLoading();
   }
 
   @override

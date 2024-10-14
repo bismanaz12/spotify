@@ -1,7 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:spotify/models/usermodel.dart';
 
 class SignUp extends StatelessWidget {
-  const SignUp({super.key});
+  SignUp({super.key});
+  TextEditingController namecont = TextEditingController();
+  TextEditingController emailcont = TextEditingController();
+  TextEditingController passcont = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +91,7 @@ class SignUp extends StatelessWidget {
                   padding: EdgeInsets.only(left: width * 0.05),
                   child: Center(
                     child: TextFormField(
+                      controller: namecont,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Full Name',
@@ -112,6 +119,7 @@ class SignUp extends StatelessWidget {
                   padding: EdgeInsets.only(left: width * 0.05),
                   child: Center(
                     child: TextFormField(
+                      controller: emailcont,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Enter Email',
@@ -139,6 +147,7 @@ class SignUp extends StatelessWidget {
                   padding: EdgeInsets.only(left: width * 0.05),
                   child: Center(
                     child: TextFormField(
+                      controller: passcont,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Password',
@@ -161,7 +170,56 @@ class SignUp extends StatelessWidget {
                   ),
                   backgroundColor: Color(0xff42C83C),
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  try {
+                    // Validate input fields
+                    if (emailcont.text.isEmpty ||
+                        passcont.text.isEmpty ||
+                        namecont.text.isEmpty) {
+                      // Show an error message to the user
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Please fill in all fields')),
+                      );
+                      return;
+                    }
+
+                    // Create user account
+                    UserCredential userCredential = await FirebaseAuth.instance
+                        .createUserWithEmailAndPassword(
+                      email: emailcont.text,
+                      password: passcont.text,
+                    );
+
+                    // Create user model
+                    Usermodel model = Usermodel(
+                      email: emailcont.text,
+                      name: namecont.text,
+                      pass: passcont.text,
+                      id: userCredential.user!.uid,
+                    );
+
+                    // Save user data to Firestore
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(userCredential.user!.uid)
+                        .set(model.toMap());
+
+                    // Clear input fields
+                    emailcont.clear();
+                    namecont.clear();
+                    passcont.clear();
+
+                    // Show success message
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('User registered successfully')),
+                    );
+                  } catch (e) {
+                    // Handle errors (e.g., email already in use, weak password)
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error: ${e.toString()}')),
+                    );
+                  }
+                },
                 child: Text(
                   'Create Account',
                   style: TextStyle(

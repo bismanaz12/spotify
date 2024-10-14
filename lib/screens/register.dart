@@ -58,6 +58,8 @@ class Register extends StatelessWidget {
                       width: width * 0.4, // 40% of screen width
                       child: Image.asset(
                         'assets/images/spotify.png',
+
+                        
                         fit: BoxFit.contain,
                       ),
                     ),
