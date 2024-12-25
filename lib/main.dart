@@ -1,17 +1,31 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:spotify/cons/provider.dart';
 import 'package:spotify/firebase_options.dart';
+import 'package:spotify/screens/articspage.dart';
 import 'package:spotify/screens/choosemode.dart';
 import 'package:spotify/screens/getstarted.dart';
+import 'package:spotify/screens/homepage.dart';
 import 'package:spotify/screens/loading.dart';
+import 'package:spotify/screens/playscreen.dart';
+import 'package:spotify/screens/profile.dart';
 import 'package:spotify/screens/register.dart';
 import 'package:spotify/screens/signin.dart';
 import 'package:spotify/screens/signup.dart';
+import 'package:spotify/screens/songscreen.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(
+      create: (context) => TracksProvider(),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => TokenProvider(),
+    )
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -42,7 +56,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: Loading());
+        home: HomePage());
   }
 }
 

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spotify/models/usermodel.dart';
+import 'package:spotify/screens/signin.dart';
 
 class SignUp extends StatelessWidget {
   SignUp({super.key});
@@ -213,6 +214,8 @@ class SignUp extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('User registered successfully')),
                     );
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SignIn()));
                   } catch (e) {
                     // Handle errors (e.g., email already in use, weak password)
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -289,11 +292,17 @@ class SignUp extends StatelessWidget {
                       fontSize: width * 0.04,
                     ),
                   ),
-                  Text(
-                    'Sign In',
-                    style: TextStyle(
-                      color: Color(0xff288CE9),
-                      fontSize: width * 0.04,
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => SignIn()));
+                    },
+                    child: Text(
+                      'Sign In',
+                      style: TextStyle(
+                        color: Color(0xff288CE9),
+                        fontSize: width * 0.04,
+                      ),
                     ),
                   ),
                 ],
